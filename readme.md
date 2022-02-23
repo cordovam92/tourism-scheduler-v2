@@ -5,8 +5,8 @@
 
 ## Environment Setup
 
-1. Install Node.js LTS. LTS located [here] (https://nodejs.org/en/download/)
+1. Install Node.js LTS. LTS located [here](https://nodejs.org/en/download/)
 
-2. Install Android SDK. SDK located [here] (https://developer.android.com/studio)
+2. Install Android SDK. SDK located [here](https://developer.android.com/studio)
 
 3. 
