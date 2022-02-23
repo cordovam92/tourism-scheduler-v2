@@ -14,7 +14,7 @@ import {
     ScrollView,
 } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/native-stack';
 import { route } from 'react-navigation';
 import Timeline from 'react-native-timeline-flatlist';
 
