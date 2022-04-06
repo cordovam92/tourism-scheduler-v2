@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\assets",
+    "\\components",
+    "\\navigation",
+    "\\screens"
   ],
-  "SelectedNode": "\\tourism-scheduler-v2",
   "PreviewInSolutionExplorer": false
 }
