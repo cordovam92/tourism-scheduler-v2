@@ -1,6 +1,6 @@
 import React from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Icon, IconProps } from 'react-native-elements';
 import {
@@ -13,14 +13,11 @@ import {
   Alert,
   ScrollView,
   NavigatorIOS,
+  PermissionsAndroid,
 } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { route } from 'react-navigation';
 import Timeline from 'react-native-timeline-flatlist';
-
-navigator.geolocation = require('@react-native-community/geolocation');
-
 
 const styles = StyleSheet.create({
   container: {
@@ -41,8 +38,8 @@ class Itinerary extends React.Component {
     super(props);
 
     this.state = {
-      latitude: 0,
-      longitude: 0,
+      latitude: 32.785529,
+      longitude: -79.937500,
       data: [],
       places: [],
       placesDetails: [],
@@ -50,9 +47,9 @@ class Itinerary extends React.Component {
       next_page_token: null,
       userActivities: [],
       itinerary: null,
-      userInterests: this.props.route.params.userInterests,
-      arrivalDate: this.props.route.params.arrivalDate,
-      departureDate: this.props.route.params.Departure,
+      userInterests: this.state.route.params.userInterests,
+      arrivalDate: this.state.route.params.arrivalDate,
+      departureDate: this.state.route.params.departureDate,
       numOfRestaurants: 0,
       numOfAquarium: 0,
       numOfMuseums: 0,
@@ -65,33 +62,53 @@ class Itinerary extends React.Component {
   }
 
   async componentDidMount() {
-    // Returns the users current latitude and longitude and sets those values
-    // to the lat and long state variables
-    Geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      error => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 2000 },
-    );
+
+      // Returns the users current latitude and longitude and sets those values
+      // to the lat and long state variables
+      //Geolocation.getCurrentPosition(
+        //(position) => {
+          //this.setState({
+            //latitude: position.coords.latitude,
+            //longitude: position.coords.longitude,
+            //error: null,
+          //});
+        //},
+        //(error) => this.setState({ error: error.message }),
+        //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 2000 }
+      //);
+
+    
 
     // Calls the Places API for each instance of a user interest and then
     // calls the Places Details API to return more information about all the Places
     // returned from the Places call, all calls of the Details API are appended to the
     // placesDetails state array
-    for (let i=0; i < this.state.userInterests.length; i++) {
-      await this.placesLocation(this.state.userInterests[i]);
-      await this.setPlaceId();
-      for (let j=0; j < this.state.places.results.length; j++) {
-        await this.placesDetails(this.state.placeID[j]);
-      }
-    }
+    //for (let i=0; i < this.state.userInterests.length; i++) {
+      //await this.placesLocation(this.state.userInterests[i]);
+      //await this.setPlaceId();
+      //for (let j=0; j < this.state.places.results.length; j++) {
+        //await this.placesDetails(this.state.placeID[j]);
+      //}
+    //}
 
-    console.log(this.state.placesDetails);
+    //const returnInterests = this.state.userInterests.map((currentInterest) => {
+      //const getPlacesFromAPI = async () => {
+        //let response = await fetch(
+          //'http://localhost:8080/place/search2?type=' + new URLSearchParams({
+            //type: currentInterest
+          //}), {
+            //method: 'GET',
+            //headers: {
+              //Accept: 'application/json',
+              //'Content-Type': 'application/json'
+            //},
+          //}
+        //);
+        //let this.state.placesDetails = await response.json();
+      //}
+    //})
+
+    //console.log(this.state.placesDetails);
 
     await this.itineraryLogic();
     await this.renderTimeLine();
@@ -107,17 +124,17 @@ class Itinerary extends React.Component {
 
   // Changes state of placeID to an array containing the place
   // ID of locations within the places array
-  async setPlaceId() {
-    const resultsArr = [];
+  //async setPlaceId() {
+    //const resultsArr = [];
 
-    for (let i = 0; i < this.state.places.results.length; i++) {
-      resultsArr.push(this.state.places.results[i].place_id);
-    }
+    //for (let i = 0; i < this.state.places.results.length; i++) {
+      //resultsArr.push(this.state.places.results[i].place_id);
+    //}
 
-    this.setState({
-      placeID: resultsArr,
-    });
-  }
+    //this.setState({
+      //placeID: resultsArr,
+    //});
+  //}
 
   // Returns an array with all dates between and including
   // the arrival and depature date
@@ -149,15 +166,63 @@ class Itinerary extends React.Component {
       5: 'Friday',
       6: 'Saturday',
     };
+    let timePeriodsToHours = {
+      0: '12AM',
+      0.5: '12:30AM',
+      1: '1AM',
+      1.5: '1:30AM',
+      2: '2AM',
+      2.5: '2:30AM',
+      3: '3AM',
+      3.5: '3:30AM',
+      4: '4AM',
+      4.5: '4:30AM',
+      5: '5AM',
+      5.5: '5:30AM',
+      6: '6AM',
+      6.5: '6:30AM',
+      7: '7AM',
+      7.5: '7:30AM',
+      8: '8AM',
+      8.5: '8:30AM',
+      9: '9AM',
+      9.5: '9:30AM',
+      10: '10AM',
+      10.5: '10:30AM',
+      11: '11AM',
+      11.5: '11:30AM',
+      12: '12PM',
+      12.5: '12:30PM',
+      13: '1PM',
+      13.5: '1:30PM',
+      14: '2PM',
+      14.5: '2:30PM',
+      15: '3PM',
+      15.5: '3:30PM',
+      16: '4PM',
+      16.5: '4:30PM',
+      17: '5PM',
+      17.5: '5:30PM',
+      18: '6PM',
+      18.5: '6:30PM',
+      19: '7PM',
+      19.5: '7:30PM',
+      20: '8PM',
+      20.5: '8:30PM',
+      21: '9PM',
+      21.5: '9:30PM',
+      22: '10PM',
+      22.5: '10:30PM',
+      23: '11PM',
+      23.5: '11:30PM'
+    };
     let daysInTownAsInt = daysInTown.map(date => date.getDay());
 
     for (let i = 0; i < array.length; i++) {
       if (type == 'store') {
         for (let x = 0; x < array[i].result.types.length; x++) {
           if (array[i].result.types[x] == 'store') {
-            if (
-              array[i].results.numofreviews / array[i].results.rating > max
-            ) {
+            if (array[i].results.numofreviews / array[i].results.rating > max) {
               max = array[i].results.numofreviews / array[i].results.rating;
               highestRatedPlace = array[i];
             }
@@ -168,37 +233,23 @@ class Itinerary extends React.Component {
       ) {
           for (let q = 0; q < array[i].result.opening_hours.periods.length; q++) {
             if (array[i].result.opening_hours.periods.length == 7) {
-              if (
-                array[i].result.numofreviews / array[i].result.rating > max
-              ) {
+              if (array[i].result.numofreviews / array[i].result.rating > max) {
                 max = array[i].result.numofreviews / array[i].result.rating;
                 highestRatedPlace = array[i];
               }
             } else if (type == 'store') {
                 for (let x = 0; x < array[i].result.types.length; x++) {
                   if (array[i].result.types[x] == 'store') {
-                    if (
-                      array[i].result.numofreviews / array[i].result.rating > max
-                    ) {
+                    if (array[i].result.numofreviews / array[i].result.rating > max) {
                       max = array[i].result.numofreviews / array[i].result.rating;
                       highestRatedPlace = array[i];
                     }
                   }
                 }
             } else {
-                for (
-                  let r = 0;
-                  r < array[i].result.opening_hours.periods.length;
-                  r++
-                ) {
-                  if (
-                    daysInTownAsInt.includes(
-                      array[i].result.opening_hours.periods[r].open.day,
-                    )
-                  ) {
-                    if (
-                      array[i].result.numofreviews / array[i].result.rating > max
-                    ) {
+                for (let r = 0; r < array[i].result.opening_hours.periods.length; r++) {
+                  if (daysInTownAsInt.includes(array[i].result.opening_hours.periods[r].open.day)) {
+                    if (array[i].result.numofreviews / array[i].result.rating > max) {
                       max = array[i].result.numofreviews / array[i].result.rating;
                       highestRatedPlace = array[i];
                     }

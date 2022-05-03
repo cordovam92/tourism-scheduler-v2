@@ -25,22 +25,31 @@ cd tourism-scheduler
 5. Install the necesarry dependencies
 
 ```bash
+npm install react-native
+npm install react-native-safe-area-context
 npm install react-native-elements
-npm install @react-navigation
-npm install react-native-maps
+npm install @react-navigation/native
+npm install @react-navigation/stack
 npm install react-native-modal-datetime-picker
-npm install @react-native-community/geolocation
+npm install react-native-maps
+npm install react-native-geolocation-service
+npm install react-navigation
 npm install react-native-timeline-flatlist
-npm install react-native-google-places-autocomplete
 ```
+6. Before attempting to run the application, open up Android SDK and click More Actions
 
-6. Run the application, either one will work
+7. Within that menu select Virtual Device Manager
+
+8. Create a device if one isn't already available, the higher the Pixel version the better
+
+9. Run the application
 ```bash
 npm start
-expo start
 ```
 
-7. Success!
+10. Press a to run the application on the emulated android device
+
+11. Success!
 
 ## Resources
 

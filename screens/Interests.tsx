@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Icon, IconProps } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
@@ -18,7 +17,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     flexDirection: 'row',
-    flewWrap: 'wrap',
+    flexWrap: 'wrap',
     paddingTop: 150,
     paddingBottom: 50,
   },
@@ -81,7 +80,7 @@ class Interests extends Component {
 
   // Sets the state variable arrivalDate equal to users selected
   // arrival date
-  handleArrivalDateConfirm = date => {
+  handleArrivalDateConfirm = (date: Date) => {
     this.setState({
       arrivalDate: date,
     });
@@ -90,7 +89,7 @@ class Interests extends Component {
 
   // Sets the state variable departureDate equal to users selected
   // departure date
-  handleDateConfirm = date => {
+  handleDateConfirm = (date: Date) => {
     if (this.state.arrivalDate == null) {
       this.setState({
         arrivalDate: date,
@@ -212,8 +211,7 @@ renderDateTimeElement() {
 
 render() {
   const { navigation } = this.props;
-  const { show, show2, date, mode, isDatePickerVisible, isTimePickerVisible } =
-    this.state;
+  const { date, mode, isDatePickerVisible } = this.state;
 
   return (
     <>
@@ -236,6 +234,7 @@ render() {
 
         {/* Interest Buttons */}
         <SafeAreaView style={styles.button}>
+          <SafeAreaView style={styles.space}></SafeAreaView>
           <Button
             disabled={this.state.userInterests.includes('Restaurant')}
             onPress={() =>
@@ -263,24 +262,24 @@ render() {
                 userInterests: [...this.state.userInterests, 'Museum'],
               })
             }
-            title="Musuem"
+            title="Museum"
           />
           <SafeAreaView style={styles.space}></SafeAreaView>
           <Button
-            disabled={this.state.userInterests.includes('tourist_attraction')}
+            disabled={this.state.userInterests.includes('Tourist Attraction')}
             onPress={() =>
               this.setState({
-                userInterests: [...this.state.userInterests, 'tourist_attraction'],
+                userInterests: [...this.state.userInterests, 'Tourist Attraction'],
               })
             }
             title="Tourist Attraction"
           />
           <SafeAreaView style={styles.space}></SafeAreaView>
           <Button
-            disabled={this.state.userInterests.includes('art_gallery')}
+            disabled={this.state.userInterests.includes('Art Gallery')}
             onPress={() =>
               this.setState({
-                userInterests: [...this.state.userInterests, 'art_gallery'],
+                userInterests: [...this.state.userInterests, 'Art Gallery'],
               })
             }
             title="Art Gallery"
@@ -297,10 +296,10 @@ render() {
           />
           <SafeAreaView style={styles.space}></SafeAreaView>
           <Button
-            disabled={this.state.userInterests.includes('shopping')}
+            disabled={this.state.userInterests.includes('Shopping')}
             onPress={() =>
               this.setState({
-                userInterests: [...this.state.userInterests, 'shopping'],
+                userInterests: [...this.state.userInterests, 'Shopping'],
               })
             }
             title="Shopping"
@@ -330,8 +329,8 @@ render() {
           onPress={() =>
             this.props.navigation.navigate('Itinerary', {
               userInterests: this.state.userInterests,
-              arrivalDate: this.state.arrivalDate,
-              departureDate: this.state.departureDate,
+              arrivalDate: this.state.arrivalDate.toISOString(),
+              departureDate: this.state.departureDate.toISOString(),
             })
           }
           title="Confirm"

@@ -1,10 +1,7 @@
 import React from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import { StyleSheet, Text, View } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-navigator.geolocation = require('@react-native-community/geolocation');
 
 const styles = StyleSheet.create({
   container: {

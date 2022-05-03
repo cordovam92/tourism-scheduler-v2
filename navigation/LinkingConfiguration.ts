@@ -25,10 +25,15 @@ const linking: LinkingOptions<RootStackParamList> = {
               TabTwoScreen: 'Itinerary',
             },
           },
+          TabThree: {
+            screens: {
+              TabThreeScreen: 'Map',
+            },
+          },
         },
       },
       Modal: 'modal',
-      NotFound: '*',
+      NotFound: 'NotFoundScreen',
     },
   },
 };
